@@ -1,0 +1,490 @@
+/* Direction 1: Marginalia. Mockup styles.
+   Typefaces here are the free fallbacks from the plan (Alegreya, Alegreya Sans, Amiri),
+   not the recommended paid faces (Skolar PE, 29LT Idris). */
+
+:root{
+  --paper:#F6F3EC; --ink:#17140F; --soft:#4F4A41; --rubric:#A82C16; --lapis:#1E3A8A;
+  --night:#12141F; --amber:#E9B872; --rubric-night:#F38466;
+  --buff:#EADFC6; --rose:#EBD3C8; --celadon:#D5DDCF; --sky:#CFD9E0;
+  --rule:rgba(23,20,15,.2); --rule-soft:rgba(23,20,15,.1); --wash:rgba(168,44,22,.15);
+  --serif:"Alegreya",Georgia,"Times New Roman",serif;
+  --sans:"Alegreya Sans","Gill Sans","Trebuchet MS",sans-serif;
+  --sc:"Alegreya Sans SC","Alegreya Sans",sans-serif;
+  --ar:"Amiri","Geeza Pro",serif;
+  --quran:"Amiri Quran","Amiri",serif;
+  --gut:clamp(20px,4.4vw,64px);
+  --g:clamp(12px,1.7vw,24px);
+  --head:56px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font:400 20px/1.6 var(--serif);
+  font-feature-settings:"kern","liga","onum";
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+img{max-width:100%; height:auto}
+a{color:inherit; text-decoration-thickness:1px; text-underline-offset:.2em}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--lapis); outline-offset:3px}
+::selection{background:var(--rubric); color:var(--paper)}
+h1,h2,h3,p,ol,ul,figure,blockquote{margin:0; padding:0}
+ol,ul{list-style:none}
+
+/* capitals with true small capitals, from a small-caps face; never tracked uppercase */
+.sc{font-family:var(--sc); font-weight:500; letter-spacing:.03em}
+.num{font-family:var(--sans); font-weight:500; color:var(--rubric); font-feature-settings:"onum"}
+.ar{font-family:var(--ar); font-size:1.3em; line-height:1}
+
+.folio{
+  display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); column-gap:var(--g);
+  width:min(100% - 2*var(--gut),1360px); margin-inline:auto;
+}
+
+/* ---------- running head ---------- */
+.head{
+  position:sticky; top:0; z-index:30; height:var(--head);
+  background:var(--paper); border-bottom:1px solid var(--rule);
+  transition:background-color .5s, color .5s, border-color .5s;
+}
+.head .folio{height:100%; align-items:center}
+.head__name{grid-column:1 / span 4; font-size:17px; text-decoration:none; opacity:0; transition:opacity .4s}
+.past-opening .head__name,.head--essay .head__name{opacity:1}
+.head__nav{grid-column:5 / span 6; display:flex; gap:clamp(16px,2.2vw,34px); font-size:17px}
+.head__nav a{text-decoration:none; padding:6px 0; border-bottom:1px solid transparent}
+.head__nav a:hover{border-bottom-color:var(--rubric)}
+.head__aux{grid-column:11 / span 2; text-align:right; font-size:17px}
+.head__aux a{text-decoration:none}
+.on-night .head{background:var(--night); color:var(--paper); border-bottom-color:rgba(246,243,236,.18)}
+
+/* ---------- 1. the annotated sentence ---------- */
+.opening{position:relative}
+.opening__pin{
+  position:relative; display:grid; align-items:center;
+  min-height:calc(100svh - var(--head) - 30px);
+  padding-block:clamp(28px,5vh,56px);
+  background-image:repeating-linear-gradient(to bottom,transparent 0 39px,var(--rule-soft) 39px 40px);
+  background-position:0 12px;
+}
+.opening__grid{position:relative; row-gap:clamp(18px,3.4vh,40px); align-items:start; --fs:clamp(27px,3.5vw,52px); --pt:clamp(30px,3.2vw,46px)}
+.name{
+  grid-column:1 / span 10; grid-row:1;
+  font-weight:400; font-size:clamp(50px,10.4vw,156px); line-height:.86; letter-spacing:-.024em;
+}
+.name span{display:block; padding-left:calc((100% - 9 * var(--g)) / 10 * 2 + 2 * var(--g))}
+.sentence{
+  grid-column:3 / span 6; grid-row:2; position:relative;
+  font-size:var(--fs); line-height:1.24; letter-spacing:-.008em;
+  padding:var(--pt) clamp(18px,2.4vw,36px) clamp(24px,2.8vw,40px);
+  margin-left:calc(-1 * clamp(18px,2.4vw,36px));
+}
+.sentence::before{content:""; position:absolute; inset:0; border:1px solid rgba(23,20,15,.42); pointer-events:none}
+/* the word being read is written in red lead, over a wash of the same colour */
+.mark{
+  position:relative; white-space:nowrap; text-decoration:none; cursor:pointer;
+  background:linear-gradient(var(--wash),var(--wash)) no-repeat 0 84% / 0 .44em;
+  transition:background-size .5s var(--ease), color .3s;
+}
+.mark.is-active{color:var(--rubric); background-size:100% .44em}
+.bl{display:inline-block; width:0; height:0; vertical-align:baseline}
+.mark::before{
+  content:""; position:absolute; left:0; right:0; top:.1em; height:2px; background:var(--rubric);
+  transform:scaleX(0); transform-origin:left center; transition:transform .55s var(--ease);
+}
+.mark::after{
+  content:attr(data-n); position:absolute; top:-.2em; left:100%; margin-left:.12em;
+  font:500 .27em/1 var(--sans); color:var(--rubric);
+}
+.mark.is-on::before,.mark:hover::before,.mark:focus-visible::before{transform:scaleX(1)}
+.has-ties .mark::before{display:none}   /* on wide screens the drawn ties carry the marks */
+
+/* notes 1, 2, 3 and 5 in the outer margin, note 4 in the inner one, each level with the line its word sits on */
+.glosses{display:flex; flex-direction:column; gap:clamp(16px,2.6vh,26px)}
+.glosses--outer{grid-column:10 / span 3; grid-row:2; align-self:start; margin-top:calc(-.5 * var(--fs))}
+.glosses--inner{grid-column:1 / span 2; grid-row:2; align-self:start; margin-top:calc(var(--pt) + 2.4 * var(--fs) - 10px); padding-right:clamp(26px,3vw,46px)}
+.glosses--inner .gloss{margin-left:auto; padding-left:0; padding-right:1.5em; text-align:right}
+.glosses--inner .gloss__n{left:auto; right:0}
+.glosses--inner{padding-right:clamp(16px,2vw,30px)}
+.glosses--inner .gloss__line{font-size:16px}
+.gloss{
+  position:relative; max-width:30ch; padding-left:1.5em;
+  font:400 15px/1.38 var(--sans); color:var(--soft);
+  transition:color .35s, transform .6s var(--ease);
+}
+.gloss__n{position:absolute; left:0; top:.05em; font:500 13px/1.38 var(--sans); color:var(--rubric)}
+.gloss a{text-decoration:none; border-bottom:1px solid var(--rule)}
+.gloss a:hover{border-bottom-color:var(--rubric)}
+.gloss > a{background:linear-gradient(var(--wash),var(--wash)) no-repeat 0 88% / 0 .5em; transition:background-size .5s var(--ease), border-color .3s}
+.gloss.is-on > a{background-size:100% .5em; border-bottom-color:var(--rubric)}
+.gloss__line{display:block; margin-top:7px; font:italic 400 18px/1.34 var(--serif); color:var(--ink); quotes:none}
+.gloss cite{display:block; margin-top:4px; font:400 13px/1.3 var(--sans); font-style:normal; color:var(--soft)}
+.gloss .ar{display:inline-block; margin-left:.3em; color:var(--ink); font-size:1.45em}
+/* the ties: a bar along each word, a line from it out to its note, a dot at the note.
+   All five show faintly; the one being read is inked in, and those already read stay darker */
+.ties{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible}
+.tie path{fill:none; stroke:var(--rubric); stroke-linecap:round; stroke-linejoin:round}
+.tie .bar{stroke-width:1.5; opacity:.7; transition:opacity .4s, stroke-width .4s}
+.tie .base{stroke-width:1.1; opacity:.5; transition:opacity .4s}
+.tie .ink{stroke-width:1.8; stroke-dasharray:1 1; stroke-dashoffset:1; transition:stroke-dashoffset .8s var(--ease)}
+.tie .dot{fill:var(--rubric); opacity:.6; transition:opacity .4s}
+.tie.is-done .bar{stroke-width:2; opacity:.95}
+.tie.is-done .base{opacity:.75}
+.tie.is-done .dot{opacity:.85}
+.tie.is-active .bar{stroke-width:2.4; opacity:1}
+.tie.is-active .ink{stroke-dashoffset:0}
+.tie.is-active .dot{opacity:1}
+.opening__foot{
+  grid-column:3 / span 6; grid-row:3; display:flex; justify-content:space-between; gap:20px;
+  font:400 14px/1.4 var(--sans); color:var(--soft);
+}
+.opening__foot b{font-weight:500; color:var(--rubric)}
+
+/* the pinned, stepped version: wide screens, with script, without reduced motion */
+.stepped .opening{height:calc(100svh + 190vh)}
+.stepped .opening__pin{position:sticky; top:var(--head)}
+.stepped .gloss__line,.stepped .gloss cite{max-height:0; opacity:0; overflow:hidden; margin-top:0; transition:max-height .6s var(--ease), opacity .45s, margin .45s}
+.stepped .gloss.is-on{color:var(--ink)}
+.stepped .gloss.is-on .gloss__line{max-height:14em; opacity:1; margin-top:7px}
+.stepped .gloss.is-on cite{max-height:3em; opacity:1; margin-top:4px}
+.stepped .gloss:hover,.stepped .gloss:focus-within{color:var(--ink)}
+/* the notes open and close as you scroll; they must not move the name or the sentence */
+.stepped .glosses{height:0}
+/* two notes sit at an angle, as marginal glosses often do, pivoting on their number so the tie stays put; they turn level when read */
+.stepped .gloss--4{transform:rotate(-16deg); transform-origin:100% 0}
+.stepped .gloss--5{transform:rotate(16deg); transform-origin:0 0}
+.stepped .gloss--4.is-on,.stepped .gloss--5.is-on{transform:none}
+
+/* arrival: ruled lines, then the frame, then the text; under a second */
+@media (prefers-reduced-motion:no-preference){
+  .opening__pin{animation:rule-in .9s ease-out both}
+  .name{animation:set-in .6s var(--ease) .1s both}
+  .sentence{animation:set-in .6s var(--ease) .28s both}
+  .sentence::before{animation:frame-in .7s var(--ease) .2s both}
+  .gloss,.opening__foot{animation:fade-in .5s ease-out .5s both}
+  .ties{animation:fade-in .6s ease-out .8s both}
+}
+@media (prefers-reduced-motion:reduce){.tie *,.mark,.gloss > a{transition:none !important}}
+@keyframes rule-in{from{background-size:100% 0} to{background-size:100% 100%}}
+@keyframes set-in{from{opacity:0; translate:0 10px} to{opacity:1; translate:0 0}}
+@keyframes fade-in{from{opacity:0} to{opacity:1}}
+@keyframes frame-in{from{clip-path:inset(0 100% 100% 0)} to{clip-path:inset(0 0 0 0)}}
+
+/* ---------- section furniture ---------- */
+.sec{padding-block:clamp(72px,12vh,150px); position:relative}
+.sec__mark{grid-column:1 / span 2; font:400 15px/1.4 var(--sans); color:var(--soft); padding-top:.5em}
+.sec__mark .num{display:block; font-size:44px; line-height:1; font-family:var(--serif); font-weight:400; margin-bottom:10px}
+.sec__mark .sc{display:block; font-size:19px; color:var(--ink)}
+.sec__note{grid-column:10 / span 3; font:400 15px/1.4 var(--sans); color:var(--soft); padding-top:.7em}
+.textlink{font-family:var(--sans); font-size:17px; text-decoration:none; border-bottom:1px solid currentColor; padding-bottom:1px}
+.textlink:hover{color:var(--rubric)}
+
+/* ---------- 2. the book: the one dark scene ---------- */
+.book{background:var(--night); color:var(--paper); overflow:hidden; padding-block:clamp(90px,16vh,190px)}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .book{animation:darken linear both; animation-timeline:view(); animation-range:entry 0% entry 70%}
+  }
+}
+@keyframes darken{from{background-color:var(--paper)} to{background-color:var(--night)}}
+.book::before{ /* light from the cover's window, falling across the page */
+  content:""; position:absolute; left:18%; top:38%; width:90%; height:70%;
+  background:linear-gradient(100deg,rgba(233,184,114,.15),rgba(233,184,114,.04) 55%,transparent 80%);
+  clip-path:polygon(0 30%,100% 0,100% 100%,6% 62%); pointer-events:none;
+}
+.book .folio{align-items:center; position:relative}
+.tome{grid-column:1 / span 5; justify-self:center; perspective:1700px; position:relative; width:min(100%,350px)}
+.tome::before{ /* glow behind the object */
+  content:""; position:absolute; inset:-28% -40%; pointer-events:none;
+  background:radial-gradient(closest-side,rgba(233,184,114,.2),rgba(233,184,114,.06) 55%,transparent);
+}
+.tome__book{position:relative; aspect-ratio:800 / 1190; transform-style:preserve-3d; transform:rotateY(var(--turn,22deg)) rotateX(1.5deg); --d:34px}
+.tome__front{display:block; width:100%; height:100%; object-fit:cover; transform:translateZ(calc(var(--d) / 2)); backface-visibility:hidden}
+.tome__spine{position:absolute; left:0; top:0; width:var(--d); height:100%; background:linear-gradient(90deg,#0b0b0c,#1d1b1a 60%,#0e0e0f); transform:rotateY(-90deg) translateZ(calc(var(--d) / 2))}
+.tome__spine::after{content:"The Divine Reality"; position:absolute; left:50%; top:9%; writing-mode:vertical-rl; translate:-50% 0; font:500 13px/1 var(--sc); letter-spacing:.06em; color:var(--amber); white-space:nowrap}
+.tome__back{position:absolute; inset:0; background:#0b0b0c; transform:translateZ(calc(var(--d) / -2))}
+.tome__cast{position:absolute; left:-6%; right:-18%; bottom:-7%; height:9%; background:radial-gradient(closest-side,rgba(0,0,0,.6),transparent); filter:blur(6px)}
+.book__text{grid-column:6 / span 4}
+.book__kicker{font-size:19px; color:var(--amber)}
+.book__title{font-weight:400; font-size:clamp(46px,6.3vw,96px); line-height:.94; letter-spacing:-.02em; margin-top:10px}
+.book__sub{font-style:italic; font-size:clamp(20px,1.9vw,27px); line-height:1.25; margin-top:14px; color:var(--amber)}
+.book__pitch{margin-top:30px; max-width:32em; font-size:20px; line-height:1.6}
+.book__acts{margin-top:34px; display:grid; gap:0; max-width:26em; border-top:1px solid rgba(246,243,236,.22)}
+.book__acts a{display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:14px 0; border-bottom:1px solid rgba(246,243,236,.22); text-decoration:none; font-size:22px}
+.book__acts a:hover{color:var(--amber)}
+.book__acts small{font:400 14px var(--sans); color:rgba(246,243,236,.72)}
+.book__acts .num{color:var(--rubric-night); margin-right:.7em; font-size:15px}
+.book__notes{grid-column:10 / span 3; display:grid; gap:34px; align-self:end}
+.endorse{font:400 15px/1.42 var(--sans); color:rgba(246,243,236,.86); padding-left:14px; border-left:1px solid var(--rubric-night)}
+.endorse q{display:block; font:italic 400 18px/1.36 var(--serif); color:var(--paper); quotes:"“" "”"}
+.endorse cite{display:block; margin-top:8px; font-style:normal}
+.endorse cite b{font-weight:500}
+.endorse cite i{display:block; font-style:normal; color:var(--rubric-night); font-size:13px; margin-top:2px}
+
+/* ---------- 3. essays: a contents page ---------- */
+.lead{grid-column:3 / span 6; position:relative; padding:clamp(22px,2.6vw,38px); margin-left:calc(-1 * clamp(22px,2.6vw,38px)); border:1px solid rgba(23,20,15,.42)}
+.lead__line{font-size:clamp(30px,3.7vw,56px); line-height:1.1; letter-spacing:-.012em; text-wrap:balance}
+.lead__line a{text-decoration:none}
+.lead__line a:hover{color:var(--rubric)}
+.lead__meta{margin-top:22px; font:400 16px/1.4 var(--sans); color:var(--soft)}
+.lead__meta i{font:italic 400 19px var(--serif); color:var(--ink)}
+.toc{grid-column:3 / span 6; margin-top:clamp(36px,6vh,64px)}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc li:first-child{border-top:1px solid var(--ink)}
+.toc a{display:grid; grid-template-columns:3.2em minmax(0,1fr) auto; column-gap:14px; align-items:baseline; padding:15px 0 13px; text-decoration:none}
+.toc__y{font:500 15px var(--sans); color:var(--rubric)}
+.toc__t{font-size:24px; line-height:1.2; letter-spacing:-.004em}
+.toc__t small{display:block; font:400 15px/1.35 var(--sans); color:var(--soft); margin-top:3px; letter-spacing:0}
+.toc__m{font:400 15px var(--sans); color:var(--soft); white-space:nowrap}
+.toc a:hover .toc__t,.toc a:focus-visible .toc__t{color:var(--rubric)}
+.toc__all{grid-column:3 / span 6; margin-top:26px}
+.firstline{grid-column:10 / span 3; grid-row:2 / span 2; align-self:start; position:sticky; top:calc(var(--head) + 40px); margin-top:clamp(36px,6vh,64px); padding-left:14px; border-left:1px solid var(--rubric); min-height:6em}
+.firstline__label{font-size:17px; color:var(--soft)}
+.firstline__text{margin-top:8px; font:italic 400 19px/1.4 var(--serif)}
+.firstline__src{margin-top:8px; font:400 13px/1.3 var(--sans); color:var(--soft)}
+
+/* ---------- 4. five questions: sheets laid on a desk ---------- */
+.sheets{padding-bottom:clamp(60px,10vh,120px)}
+.sheets__intro{padding-block:clamp(60px,10vh,120px) 40px}
+.sheets__intro p{grid-column:3 / span 6; font-size:clamp(26px,2.6vw,38px); line-height:1.2}
+.sheet{
+  position:sticky; top:calc(var(--head) + (var(--i) - 1) * 46px);
+  min-height:calc(100svh - var(--head) - 4 * 46px);
+  background:var(--tint); border-top:1px solid var(--ink);
+  padding-block:11px clamp(40px,7vh,80px);
+}
+.sheet__tab{grid-column:1 / span 12; display:flex; gap:1.2em; align-items:baseline; height:34px; font-size:18px}
+.sheet__tab .num{font-size:15px}
+.sheet__q{grid-column:3 / span 8; margin-top:clamp(26px,7vh,84px); font-weight:400; font-size:clamp(44px,7.4vw,112px); line-height:.94; letter-spacing:-.024em; text-wrap:balance}
+.sheet__q a{text-decoration:none}
+.sheet__q a:hover{color:var(--rubric)}
+.sheet__pieces{grid-column:3 / span 6; margin-top:clamp(28px,6vh,60px); border-top:1px solid var(--rule)}
+.sheet__pieces li{border-bottom:1px solid var(--rule)}
+.sheet__pieces a{display:flex; justify-content:space-between; gap:20px; align-items:baseline; padding:11px 0; text-decoration:none; font-size:21px; line-height:1.25}
+.sheet__pieces a:hover{color:var(--rubric)}
+.sheet__pieces small{font:400 14px var(--sans); color:var(--soft); white-space:nowrap}
+.sheet__count{grid-column:10 / span 3; align-self:end; font:400 15px/1.4 var(--sans); color:var(--soft); padding-left:14px; border-left:1px solid var(--rubric)}
+
+/* ---------- 5. watch: a numbered index ---------- */
+.index{grid-column:3 / span 10; border-top:1px solid var(--ink)}
+.index li{border-bottom:1px solid var(--rule)}
+.index a{display:grid; grid-template-columns:2.6em 3.4em minmax(0,1.5fr) minmax(0,1fr) 5.4em; column-gap:16px; align-items:baseline; padding:14px 0 12px; text-decoration:none}
+.index__n,.index__y{font:500 15px var(--sans)}
+.index__n{color:var(--rubric)}
+.index__y{color:var(--soft)}
+.index__t{font-size:23px; line-height:1.2}
+.index__w{font:400 16px/1.3 var(--sans); color:var(--soft)}
+.index__d{font:400 15px var(--sans); color:var(--soft); text-align:right; font-feature-settings:"tnum","lnum"}
+.index a:hover .index__t{color:var(--rubric)}
+.plate{grid-column:1 / span 2; grid-row:2; align-self:start; margin-top:14px; aspect-ratio:5 / 4; border:1px solid rgba(23,20,15,.42); display:grid; place-items:center; padding:14px; font:400 13px/1.35 var(--sans); color:var(--soft); text-align:center}
+
+/* ---------- 6. a verse ---------- */
+.verse{padding-block:clamp(90px,16vh,190px)}
+.verse__body{grid-column:3 / span 8; border-top:1px solid var(--rubric); padding-top:clamp(28px,5vh,52px)}
+.verse__ar{font-family:var(--quran); font-size:clamp(36px,5.2vw,74px); line-height:2; direction:rtl; text-align:right}
+.verse__tr{margin-top:14px; font-size:clamp(24px,2.5vw,36px); line-height:1.25; font-style:italic}
+.verse__ref{margin-top:14px; font:400 15px var(--sans); color:var(--soft)}
+.verse__ref b{font-weight:500; color:var(--rubric)}
+
+/* ---------- 7–10. listen, speaking, Sapience, letters ---------- */
+.pair{row-gap:clamp(56px,9vh,110px)}
+.block{grid-column:3 / span 6}
+.block h2{font-weight:400; font-size:clamp(28px,2.7vw,40px); line-height:1.12; letter-spacing:-.012em}
+.block p{margin-top:14px; max-width:32em}
+.rows{margin-top:22px; border-top:1px solid var(--ink)}
+.rows li{border-bottom:1px solid var(--rule)}
+.rows a{display:flex; justify-content:space-between; gap:20px; align-items:baseline; padding:12px 0; text-decoration:none; font-size:21px; line-height:1.25}
+.rows a:hover{color:var(--rubric)}
+.rows small{font:400 15px var(--sans); color:var(--soft); white-space:nowrap; font-feature-settings:"tnum","lnum"}
+.sapience{grid-column:3 / span 10; padding:6px 0 6px clamp(18px,2.4vw,34px); border-left:2px solid #CD242C}
+.sapience h2{font-weight:400; font-size:clamp(28px,2.7vw,40px); line-height:1.12}
+.sapience h2 span{color:#CD242C}
+.sapience p{margin-top:12px; max-width:34em}
+.sapience ul{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px 34px}
+.letters form{margin-top:24px; display:flex; gap:18px; align-items:flex-end; max-width:30em}
+.letters label{flex:1; font:400 14px var(--sans); color:var(--soft)}
+.letters input{display:block; width:100%; margin-top:4px; padding:6px 0 8px; border:0; border-bottom:1px solid var(--ink); border-radius:0; background:transparent; font:400 21px var(--serif); color:var(--ink)}
+.letters input::placeholder{color:#7b756a}
+.letters button{padding:8px 0; border:0; border-bottom:1px solid var(--ink); background:none; font:500 18px var(--sc); letter-spacing:.03em; color:var(--ink); cursor:pointer}
+.letters button:hover{color:var(--rubric); border-color:var(--rubric)}
+.fine{font:400 14px/1.4 var(--sans); color:var(--soft)}
+
+/* ---------- 11. colophon and catchword ---------- */
+.colophon{border-top:1px solid var(--ink); padding-block:clamp(60px,10vh,110px) 34px}
+.colophon__note{grid-column:4 / span 6; text-align:center; font-size:21px; line-height:1.5}
+.colophon__note span{display:block}
+.colophon__note .num{font-family:var(--serif); font-size:1em}
+.colophon__mark{display:block; margin:18px auto 0; width:9px; height:9px; background:var(--rubric); rotate:45deg}
+.sitemap{grid-column:3 / span 8; margin-top:clamp(50px,8vh,90px); display:grid; grid-template-columns:repeat(4,1fr); gap:10px var(--g); font-size:18px}
+.sitemap a{text-decoration:none}
+.sitemap a:hover{color:var(--rubric)}
+.catch{grid-column:8 / span 5; margin-top:clamp(46px,8vh,90px); text-align:right; font:400 14px/1.3 var(--sans); color:var(--soft)}
+.catch a{display:inline-block; margin-top:4px; font:italic 400 clamp(26px,2.6vw,36px)/1.1 var(--serif); color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rubric); view-transition-name:page-title}
+.catch a:hover{color:var(--rubric)}
+
+@view-transition{navigation:auto}
+::view-transition-group(page-title){animation-duration:.6s; animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.35s}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none !important}}
+
+/* ====================== the essay page ====================== */
+.essay{--measure:600px; --note-w:290px; --note-gap:64px}
+.essay__head{padding-block:clamp(56px,11vh,130px) clamp(34px,6vh,64px)}
+.essay__head > *{grid-column:3 / span 8}
+.essay__topic{font-size:19px; color:var(--soft)}
+.essay__topic a{text-decoration:none; color:var(--rubric)}
+.essay__title{margin-top:10px; font-weight:400; font-size:clamp(52px,9vw,136px); line-height:.9; letter-spacing:-.026em; view-transition-name:page-title; width:fit-content}
+.essay__sum{margin-top:26px; max-width:24em; font-size:clamp(23px,2.1vw,29px); line-height:1.3; font-style:italic}
+.essay__meta{margin-top:22px; font:400 16px/1.4 var(--sans); color:var(--soft)}
+.essay__body{align-items:start; padding-bottom:clamp(60px,10vh,120px)}
+.essay__inner{grid-column:1 / span 2; position:sticky; top:calc(var(--head) + 36px); font:400 15px/1.4 var(--sans); color:var(--soft)}
+.essay__inner .sc{font-size:17px; color:var(--ink); display:block}
+.essay__where{margin-top:4px; min-height:2.8em; max-width:12em}
+.essay__prog{margin-top:18px; display:flex; align-items:center; gap:10px}
+.essay__prog i{position:relative; display:block; width:1px; height:120px; background:var(--rule)}
+.essay__prog i::after{content:""; position:absolute; left:-3px; width:7px; height:1px; background:var(--rubric); top:calc(var(--p,0) * 100%); box-shadow:0 0 0 .5px var(--rubric)}
+.essay__prog b{font-weight:500; color:var(--rubric)}
+.essay__acts{margin-top:22px; display:grid; gap:5px; justify-items:start}
+.essay__acts a,.essay__acts button{font:500 17px var(--sc); letter-spacing:.03em; color:var(--ink); background:none; border:0; padding:0; text-decoration:none; cursor:pointer; border-bottom:1px solid var(--rule)}
+.essay__acts a:hover,.essay__acts button:hover{color:var(--rubric)}
+
+.essay__text{grid-column:3 / span 10; max-width:var(--measure); position:relative; font-size:21px; line-height:1.58}
+.essay__text > p{position:relative; margin-top:0}
+.essay__text > p + p{text-indent:1.4em}
+.essay__text > h2 + p,.essay__text > h3 + p,.essay__text > figure + p,.essay__text > .epigraph + p{text-indent:0}
+.essay__text h2{margin:54px 0 14px; font-weight:400; font-size:34px; line-height:1.1; letter-spacing:-.012em; position:relative}
+.essay__text h2::before{content:"§"; position:absolute; right:calc(100% + 14px); top:.12em; font:400 22px var(--serif); color:var(--rubric)}
+.essay__text h3{margin:32px 0 6px; font:500 21px/1.3 var(--sc); letter-spacing:.03em}
+.epigraph{margin-bottom:34px; font-style:italic; font-size:27px; line-height:1.3; text-wrap:balance; position:relative}
+.essay__text > p.first::first-line{font-family:"Alegreya SC",var(--serif); letter-spacing:.035em}
+.pn{position:absolute; right:calc(100% + 16px); top:.5em; font:500 13px/1 var(--sans); color:var(--rubric); text-decoration:none; text-indent:0; opacity:0; transition:opacity .2s}
+p:hover > .pn,.pn:focus-visible,p:target > .pn{opacity:1}
+.cited{margin:26px 0 26px 1.4em; font-size:20px; line-height:1.5; position:relative}
+.cited + p{text-indent:0}
+
+/* marked phrases and their notes */
+.ref{border-radius:0; cursor:pointer; text-decoration:none; color:inherit}
+.ref.is-tied{text-decoration:overline; text-decoration-color:var(--rubric); text-decoration-thickness:1.5px}
+.fnm{font:500 .62em/1 var(--sans); color:var(--rubric); vertical-align:.62em; margin-left:.08em; text-decoration:none; padding:0 .12em; text-indent:0}
+.note{
+  float:right; clear:right; width:var(--note-w); margin-right:calc(-1 * (var(--note-w) + var(--note-gap)));
+  margin-bottom:18px; padding-left:1.6em; position:relative; text-indent:0;
+  font:400 15px/1.42 var(--sans); font-style:normal; color:var(--soft); text-align:left; letter-spacing:0;
+  transition:color .3s;
+}
+.note__n{position:absolute; left:0; top:0; font-weight:500; color:var(--rubric)}
+.note.is-near,.note.is-tied,.note:hover{color:var(--ink)}
+.note i{font-style:italic}
+.note a{color:var(--lapis)}
+.note .ar{display:block; font-size:30px; line-height:1.5; color:var(--ink); margin-bottom:2px}
+.note--plain{padding-left:14px; border-left:1px solid var(--rule)}
+.note--rev{padding-left:14px; border-left:1px solid var(--rubric); color:var(--rubric)}
+.note--rev.is-near,.note--rev:hover{color:var(--rubric)}
+.note--rev b{font-weight:500; display:block}
+.note--rel{padding-left:14px; border-left:1px solid var(--lapis)}
+.note--rel b{font:500 16px var(--sc); letter-spacing:.03em; display:block; color:var(--ink)}
+.tie{position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; overflow:visible; z-index:2}
+.tie path{fill:none; stroke:var(--rubric); stroke-width:1}
+
+/* Qur'an and hadith */
+.ayah{margin:30px 0 30px; padding-top:18px; border-top:1px solid var(--rubric); position:relative}
+.ayah__ar{font-family:var(--quran); font-size:34px; line-height:2.1; direction:rtl; text-align:right}
+.ayah__tr{margin-top:6px; font-style:italic; font-size:22px; line-height:1.45}
+.ayah figcaption{margin-top:6px; font:400 14px var(--sans); color:var(--soft)}
+.ayah + p{text-indent:0}
+
+.essay__end{grid-column:3 / span 10; max-width:var(--measure); margin-top:54px; padding-top:18px; border-top:1px solid var(--ink); font:400 16px/1.5 var(--sans); color:var(--soft)}
+.essay__end .cite-this{margin-top:14px; padding:14px 16px; border:1px solid var(--rule); font-size:15px; color:var(--ink)}
+.essay .catch{grid-column:8 / span 5}
+.essay .catch a{view-transition-name:none}
+
+/* ====================== narrow screens ====================== */
+@media (max-width:1279px){
+  .essay{--measure:560px; --note-w:230px; --note-gap:40px}
+}
+@media (max-width:1100px){
+  .essay{--measure:500px; --note-w:200px; --note-gap:28px}
+  .gloss{font-size:14px}
+  .gloss__line{font-size:16px}
+}
+@media (max-width:980px){
+  :root{--head:50px}
+  body{font-size:19px}
+  .head__nav{display:none}
+  .head__name{grid-column:1 / span 8; opacity:1}
+  .head__aux{grid-column:9 / span 4}
+  .name{grid-column:1 / -1}
+  .name span{padding-left:0}
+  .sentence,.opening__foot,.lead,.toc,.toc__all,.block,.sheet__q,.sheet__pieces,.verse__body,.sapience,.index,.essay__head > *,.essay__text,.essay__end{grid-column:1 / -1}
+  .sentence{margin-left:0}
+  .lead{margin-left:0}
+  .opening__pin{min-height:0; padding-block:34px 44px}
+  .glosses{display:contents}
+  .gloss{max-width:none; padding:13px 0 13px 1.6em; border-bottom:1px solid var(--rule); grid-column:1 / -1; margin:0; font-size:16px}
+  .gloss--1{order:1; border-top:1px solid var(--ink); margin-top:8px} .gloss--2{order:2} .gloss--3{order:3} .gloss--4{order:4} .gloss--5{order:5}
+  .gloss__n{top:13px}
+  .glosses--inner .gloss{margin-left:0; padding:13px 0 13px 1.6em; text-align:left}
+  .glosses--inner .gloss__n{left:0; right:auto}
+  .opening__grid{--pt:20px}
+  .gloss.is-on{color:var(--ink)}
+  .gloss.is-on .gloss__n::after{content:""; position:absolute; left:-2px; right:-2px; top:-3px; height:1.5px; background:var(--rubric)}
+  .opening__foot{grid-row:auto; order:9; flex-direction:column; gap:4px}
+  .ties{display:none}
+  .sec__mark{grid-column:1 / -1; display:flex; gap:.8em; align-items:baseline; padding-top:0; margin-bottom:22px}
+  .sec__mark .num{font-size:28px; margin:0}
+  .sec__note,.firstline,.plate{display:none}
+  .tome{grid-column:1 / -1; width:min(64%,260px); margin-bottom:54px}
+  .book__text,.book__notes{grid-column:1 / -1}
+  .book__notes{margin-top:44px}
+  .book::before{left:-20%; top:16%; width:160%; height:44%}
+  .toc a{grid-template-columns:2.6em minmax(0,1fr)}
+  .toc__m{grid-column:2; font-size:14px; margin-top:2px}
+  .toc__t{font-size:22px}
+  .sheet{top:calc(var(--head) + (var(--i) - 1) * 40px); min-height:calc(100svh - var(--head) - 4 * 40px)}
+  .sheet__tab{height:30px; font-size:16px}
+  .sheet__count{grid-column:1 / -1; margin-top:22px}
+  .sheet__pieces a{flex-direction:column; gap:2px; font-size:20px}
+  .index a{grid-template-columns:2.2em minmax(0,1fr) auto; row-gap:2px}
+  .index__y{display:none}
+  .index__t{font-size:21px}
+  .index__w{grid-column:2 / span 2; grid-row:2; font-size:15px}
+  .index__d{grid-column:3; grid-row:1}
+  .rows a{font-size:20px}
+  .letters form{flex-direction:column; align-items:stretch}
+  .letters button{align-self:flex-start}
+  .colophon__note{grid-column:1 / -1; font-size:19px}
+  .sitemap{grid-column:1 / -1; grid-template-columns:repeat(2,1fr)}
+  .catch,.essay .catch{grid-column:1 / -1}
+
+  /* essay: no side margin, so every note becomes a slip under its line */
+  .essay__inner{position:static; grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:6px 22px; align-items:baseline; padding-bottom:18px; margin-bottom:26px; border-bottom:1px solid var(--rule)}
+  .essay__inner > .sc,.essay__where,.essay__prog{display:none}
+  .essay__acts{margin:0; display:flex; gap:22px}
+  .essay__text{max-width:none; font-size:20px; line-height:1.6}
+  .essay__text h2{font-size:30px}
+  .essay__text h2::before{position:static; margin-right:.3em}
+  .pn{display:none}
+  .note{float:none; display:block; width:auto; margin:12px 0 14px; padding:2px 0 2px 14px; border-left:2px solid var(--rubric); color:var(--ink); font-size:16px}
+  .note__n{position:static; margin-right:.5em}
+  .js .note{display:none}
+  .js .note.is-open{display:block}
+  .note--rev,.note--rel,.note--plain{border-left-width:2px}
+  .fnm{padding:.3em .45em; margin:0 -.1em}
+  .tie{display:none}
+  .ayah__ar{font-size:30px}
+  .essay__title{font-size:clamp(52px,17vw,96px)}
+  /* reading progress, in the bar at the foot of the screen */
+  .dock{position:fixed; left:0; right:0; bottom:0; z-index:30; height:48px; display:grid; grid-template-columns:1fr 1fr 1fr; align-items:center; background:var(--paper); border-top:1px solid var(--ink); font:500 17px var(--sc); letter-spacing:.03em; text-align:center}
+  .dock a{text-decoration:none; padding:12px 0}
+  .dock b{font-weight:500; color:var(--rubric)}
+  .dock::before{content:""; position:absolute; left:0; top:-1px; height:1px; width:calc(var(--p,0) * 100%); background:var(--rubric); box-shadow:0 0 0 .5px var(--rubric)}
+  body.has-dock{padding-bottom:48px}
+}
+@media (min-width:981px){.dock{display:none}}
+
+@media print{
+  .head,.essay__inner,.catch,.dock{display:none}
+  .note{float:none; display:block; width:auto; margin:6px 0 10px 1.4em; font-size:11pt}
+  body{font-size:11.5pt}
+}

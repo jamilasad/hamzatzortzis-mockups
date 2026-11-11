@@ -1,0 +1,16 @@
+/* The grey strip at the top of every mockup page. It is not part of any design. */
+.mockbar{
+  display:flex; align-items:center; gap:22px;
+  height:30px; padding:0 14px;
+  background:#1b1b1b; color:#9a9a9a;
+  font:500 12px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  white-space:nowrap; overflow-x:auto; scrollbar-width:none;
+  position:relative; z-index:50;
+}
+.mockbar::-webkit-scrollbar{display:none}
+.mockbar a{color:#d6d6d6; text-decoration:none; padding:3px 0; border-bottom:1px solid transparent}
+.mockbar a:hover{border-bottom-color:#777}
+.mockbar a[aria-current="page"]{color:#fff; border-bottom-color:#fff}
+.mockbar span{display:inline-flex; gap:10px; align-items:center}
+.mockbar .mockbar__note{margin-left:auto; padding-left:22px; color:#e0b18a}
+@media print{.mockbar{display:none}}

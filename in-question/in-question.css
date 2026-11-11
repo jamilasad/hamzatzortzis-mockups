@@ -1,0 +1,219 @@
+/* Direction 3: In Question. Mockup styles.
+   Display type is Inter, the free stand-in for November (Typotheque); answers are in Source Serif 4. */
+
+:root{
+  --chalk:#F5F4EF; --black:#111111; --ultra:#2438D6; --ultra-on-black:#8FA0FF; --grey:#5C5C58;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,serif;
+  --quran:"Amiri Quran","Amiri",serif;
+  --pad:clamp(20px,5.8vw,84px);
+  --head:52px;
+  --split:calc(var(--pad) + (100% - 2 * var(--pad)) * 5 / 12);
+  --gutter:clamp(24px,3.4vw,56px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0; background:var(--chalk); color:var(--black); font:400 19px/1.58 var(--serif); font-optical-sizing:auto; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
+h1,h2,h3,p,ol,ul,figure,blockquote{margin:0; padding:0}
+ol,ul{list-style:none}
+img{display:block; max-width:100%}
+a{color:inherit; text-underline-offset:.18em; text-decoration-thickness:1px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ultra); outline-offset:3px}
+.on-black a:focus-visible{outline-color:var(--ultra-on-black)}
+::selection{background:var(--ultra); color:#fff}
+.meta{font:400 14px/1.4 var(--sans); color:var(--dim,var(--grey)); letter-spacing:0}
+.q{font-family:var(--sans); font-weight:600; letter-spacing:-.045em; line-height:.92}
+.q i{font-style:normal; color:var(--sig,var(--ultra))}
+.go{font:500 15px/1.3 var(--sans); text-decoration:none; border-bottom:1.5px solid currentColor; padding-bottom:1px}
+.go:hover{color:var(--sig,var(--ultra)); border-color:currentColor}
+
+/* ---------- header ---------- */
+.top{position:sticky; top:0; z-index:20; height:var(--head); display:flex; align-items:center; justify-content:space-between; gap:20px; padding-inline:var(--pad); background:var(--chalk); border-bottom:1px solid var(--black); font:500 14px/1 var(--sans)}
+.top a{text-decoration:none; padding:8px 0}
+.top nav{display:flex; gap:clamp(14px,2.2vw,32px)}
+.top nav a:hover{color:var(--ultra)}
+
+/* ---------- the pinned questions ---------- */
+.pin{position:relative; height:225vh; background:var(--bg,var(--chalk)); color:var(--fg,var(--black)); --k:clamp(0, calc((var(--p,0) - .08) / .3), 1)}
+.pin--black{--bg:var(--black); --fg:var(--chalk); --dim:#ABABA6; --sig:var(--ultra-on-black)}
+.pin--ultra{--bg:var(--ultra); --fg:#fff; --dim:#D8DCFA; --sig:#fff}
+.pin__stick{position:sticky; top:var(--head); height:calc(100svh - var(--head)); overflow:hidden}
+.pin__who{position:absolute; left:var(--pad); top:26px; max-width:24em; font:400 15px/1.4 var(--sans)}
+.pin__who b{font-weight:600}
+.pin__ask{
+  position:absolute; left:var(--pad); top:var(--y,clamp(84px,15vh,140px)); white-space:nowrap;
+  font-size:var(--size,15vw); line-height:.88;
+  transform-origin:0 0; transform:scale(calc(1 - (1 - var(--to,.34)) * var(--k))); will-change:transform;
+}
+.pin__n{position:absolute; left:var(--pad); bottom:30px; display:flex; gap:1.6em}
+.pin__rule{position:absolute; left:var(--split); top:0; bottom:0; width:1px; background:var(--fg,var(--black)); transform-origin:0 0; transform:scaleY(var(--k))}
+.pin__answer{position:absolute; left:calc(var(--split) + var(--gutter)); right:var(--pad); top:var(--y,clamp(84px,15vh,140px)); display:grid; gap:clamp(22px,3.6vh,38px)}
+.route{--a:clamp(0, calc((var(--p,0) - var(--at,.4)) / .12), 1); opacity:var(--a); transform:translateY(calc((1 - var(--a)) * 14px))}
+.route:nth-child(1){--at:.38} .route:nth-child(2){--at:.52} .route:nth-child(3){--at:.64}
+.route + .route{padding-top:clamp(18px,3vh,30px); border-top:1px solid color-mix(in srgb, var(--fg,var(--black)) 28%, transparent)}
+.route__line{margin-top:10px; font:400 clamp(23px,2.45vw,35px)/1.22 var(--serif); letter-spacing:-.012em; clip-path:inset(0 calc((1 - var(--a)) * 100%) -10% 0); max-width:23em}
+.route__t{display:inline-block; margin-top:10px; font:600 clamp(20px,1.8vw,26px)/1.12 var(--sans); letter-spacing:-.03em; text-decoration:none; border-bottom:1.5px solid transparent}
+.route__t:hover{border-bottom-color:currentColor}
+.route__line + .route__t{margin-top:16px; font-size:17px; letter-spacing:-.01em; border-bottom-color:currentColor}
+.route .meta{display:block; margin-top:6px}
+.route > .meta:first-child{margin-top:0}
+.route > .meta:first-child + .route__t{margin-top:8px}
+
+/* ---------- the rest of the nine ---------- */
+.more{padding:clamp(70px,12vh,140px) var(--pad)}
+.more__head{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); align-items:end; margin-bottom:clamp(30px,5vh,56px)}
+.more__head h2{font-size:clamp(34px,4.6vw,66px)}
+.more li{border-top:1px solid var(--black)}
+.more li:last-child{border-bottom:1px solid var(--black)}
+.more li a{display:grid; grid-template-columns:3.4em minmax(0,1fr) auto; column-gap:16px; align-items:baseline; padding:clamp(16px,2.6vh,26px) 0; text-decoration:none}
+.more li a:hover .q{color:var(--ultra)}
+.more .q{font-size:clamp(25px,3.5vw,52px); line-height:1}
+.more__n{font:500 14px var(--sans); color:var(--grey)}
+
+/* ---------- the book: the long answer ---------- */
+.long{background:var(--black); color:var(--chalk); --dim:#ABABA6; --sig:var(--ultra-on-black); padding:clamp(80px,14vh,170px) var(--pad)}
+.long__grid{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); align-items:start}
+.long h2{font-size:clamp(52px,9.6vw,150px)}
+.long__right{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:clamp(24px,3.4vw,52px); align-items:start; padding-left:var(--gutter); border-left:1px solid var(--chalk)}
+.long__right img{width:clamp(150px,17vw,250px); height:auto}
+.long__title{font:600 clamp(26px,2.6vw,38px)/1.02 var(--sans); letter-spacing:-.035em}
+.long__sub{margin-top:8px; font:italic 400 19px/1.3 var(--serif)}
+.long__pitch{margin-top:18px; max-width:27em; font-size:18px; line-height:1.55}
+.long__acts{margin-top:22px; display:flex; flex-wrap:wrap; gap:12px 26px}
+
+/* ---------- if it is said … we say ---------- */
+.said{padding:clamp(80px,14vh,170px) var(--pad)}
+.said__head{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter)}
+.said__head h2{font-size:clamp(40px,6.4vw,96px)}
+.said__head h2 + h2{padding-left:var(--gutter); color:var(--ultra)}
+.said__rows{margin-top:clamp(34px,6vh,70px); border-top:1px solid var(--black)}
+.said__row{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); border-bottom:1px solid var(--black)}
+.said__row > *{padding-block:clamp(22px,3.6vh,36px)}
+.said__obj{font:500 clamp(22px,2.3vw,33px)/1.1 var(--sans); letter-spacing:-.03em; padding-right:8%}
+.said__rep{padding-left:var(--gutter); border-left:1px solid var(--black)}
+.said__rep p{font-size:clamp(20px,1.75vw,24px); line-height:1.38; max-width:28em}
+.said__rep .go{display:inline-block; margin-top:14px}
+.said__rep .meta{display:inline; margin-left:.8em}
+
+/* ---------- debates: a split ---------- */
+.across{background:var(--chalk); padding:0 var(--pad) clamp(80px,14vh,170px)}
+.across h2{font-size:clamp(34px,4.6vw,66px); margin-bottom:clamp(26px,4.6vh,50px)}
+.across__row{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); border-top:1px solid var(--black); text-decoration:none}
+.across__row:last-child{border-bottom:1px solid var(--black)}
+.across__row > *{padding-block:clamp(18px,3vh,30px)}
+.across__them{text-align:right; padding-right:0; font:600 clamp(24px,2.9vw,42px)/1 var(--sans); letter-spacing:-.04em}
+.across__them .meta{display:block; margin-top:8px}
+.across__motion{padding-left:var(--gutter); border-left:1px solid var(--black); font-size:clamp(21px,2vw,28px); line-height:1.2}
+.across__motion .meta{display:block; margin-top:8px}
+.across__row:hover .across__them{color:var(--ultra)}
+
+/* ---------- a verse ---------- */
+.ayah-q{background:var(--black); color:var(--chalk); --dim:#ABABA6; --sig:var(--ultra-on-black); padding:clamp(90px,16vh,190px) var(--pad)}
+.ayah-q__ar{font-family:var(--quran); font-size:clamp(34px,5vw,70px); line-height:2; direction:rtl; text-align:right}
+.ayah-q__tr{margin-top:clamp(16px,3vh,30px); font-size:clamp(34px,6.2vw,96px)}
+.ayah-q .meta{margin-top:26px}
+.ayah-q .meta b{font-weight:500; color:var(--ultra-on-black)}
+
+/* ---------- Sapience and letters, as questions ---------- */
+.ends{padding:clamp(80px,14vh,170px) var(--pad)}
+.ends__row{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); border-top:1px solid var(--black)}
+.ends__row:last-child{border-bottom:1px solid var(--black)}
+.ends__row > *{padding-block:clamp(26px,4.4vh,46px)}
+.ends__q{font-size:clamp(28px,3.3vw,48px)}
+.ends__a{padding-left:var(--gutter); border-left:1px solid var(--black)}
+.ends__a p{max-width:27em; font-size:20px; line-height:1.5}
+.ends__a ul{margin-top:16px; display:flex; flex-wrap:wrap; gap:10px 26px}
+.ends form{margin-top:20px; display:flex; gap:14px; align-items:flex-end; max-width:26em}
+.ends label{flex:1; font:400 13px var(--sans); color:var(--grey)}
+.ends input{display:block; width:100%; margin-top:4px; padding:8px 0 9px; border:0; border-bottom:1.5px solid var(--black); border-radius:0; background:transparent; font:400 19px var(--serif); color:var(--black)}
+.ends input::placeholder{color:#77766f}
+.ends button{padding:11px 18px; border:0; border-radius:0; background:var(--ultra); color:#fff; font:600 14px var(--sans); cursor:pointer}
+.ends button:hover{background:var(--black)}
+
+/* ---------- footer: the index, A to Z ---------- */
+.foot{background:var(--black); color:var(--chalk); --dim:#ABABA6; padding:clamp(60px,10vh,110px) var(--pad) 30px}
+.az{display:flex; flex-wrap:wrap; gap:0 clamp(8px,1.4vw,22px); font:600 clamp(30px,5vw,74px)/1.1 var(--sans); letter-spacing:-.04em}
+.az a{text-decoration:none}
+.az a:hover{color:var(--ultra-on-black)}
+.az span{color:#77766f}
+.foot__map{margin-top:clamp(40px,7vh,80px); display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); font:400 15px/1.4 var(--sans)}
+.foot__map nav{display:grid; grid-template-columns:repeat(3,1fr); gap:10px 20px}
+.foot__map a{text-decoration:none}
+.foot__map a:hover{color:var(--ultra-on-black)}
+.foot__fine{margin-top:clamp(40px,7vh,70px); padding-top:14px; border-top:1px solid #3a3a38}
+
+/* ====================== the essay page ====================== */
+.title{padding:clamp(40px,8vh,90px) var(--pad) clamp(34px,6vh,60px); border-bottom:1px solid var(--black)}
+.title .meta a{color:var(--black)}
+.title h1{margin-top:clamp(14px,2.4vh,26px); font-size:clamp(64px,15.6vw,236px); line-height:.86; margin-left:-.04em}
+.title__row{margin-top:clamp(28px,5vh,56px); display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); align-items:start}
+.title__sum{padding-left:var(--gutter); border-left:1px solid var(--black); font-size:clamp(22px,2.2vw,30px); line-height:1.28; max-width:24em}
+.part{display:grid; grid-template-columns:5fr 7fr; column-gap:var(--gutter); padding-inline:var(--pad); border-bottom:1px solid var(--black)}
+.part__q{padding-block:clamp(30px,5vh,56px)}
+.part__q > div{position:sticky; top:calc(var(--head) + 28px)}
+.part__q h2{margin-top:8px; font-size:clamp(28px,3.2vw,46px); max-width:10em}
+.part__pull{margin-top:22px; max-width:15em; font:500 clamp(19px,1.7vw,24px)/1.16 var(--sans); letter-spacing:-.025em; color:var(--ultra)}
+.part__a{padding:clamp(30px,5vh,56px) 0 clamp(40px,7vh,76px) var(--gutter); border-left:1px solid var(--black); font-size:20px; line-height:1.6}
+.part__a > *{max-width:620px}
+.part__a > p + p{margin-top:1.05em}
+.part__a h3{margin:34px 0 8px; font:600 19px/1.2 var(--sans); letter-spacing:-.02em}
+.part__a .epigraph{margin-bottom:30px; font:italic 400 26px/1.3 var(--serif)}
+.part__a .cited{margin:26px 0; padding-left:20px; border-left:3px solid var(--black); font-size:19px; line-height:1.55}
+.part__a sup{font:600 .6em/1 var(--sans); vertical-align:.72em; margin-left:.08em}
+.part__a sup a{text-decoration:none; color:var(--ultra); padding:0 .15em}
+.ask{font-family:var(--sans); font-weight:600; font-size:.93em; letter-spacing:-.022em; color:var(--ultra)}
+.ayah{margin:30px 0; padding:22px 0 18px; border-block:1px solid var(--black)}
+.ayah__ar{font-family:var(--quran); font-size:33px; line-height:2.1; direction:rtl; text-align:right}
+.ayah__tr{margin-top:6px; font:italic 400 21px/1.45 var(--serif)}
+.ayah figcaption{margin-top:8px; font:400 13px var(--sans); color:var(--grey)}
+.sources ol{list-style:decimal; padding-left:1.3em; font-size:16px; line-height:1.5}
+.sources li{margin-top:7px; padding-left:.3em}
+.sources li a{text-decoration:none; color:var(--ultra); margin-left:.3em}
+.nextq{display:block; background:var(--black); color:var(--chalk); --sig:var(--ultra-on-black); --dim:#ABABA6; text-decoration:none; padding:clamp(60px,11vh,130px) var(--pad)}
+.nextq .q{display:block; margin-top:14px; font-size:clamp(56px,13vw,200px); line-height:.86}
+.nextq:hover .q{color:var(--ultra-on-black)}
+
+/* ====================== narrow screens, and reduced motion ====================== */
+@media (max-width:860px){
+  .top nav a:not(.keep){display:none}
+  .pin{height:auto}
+  .pin__stick{position:static; height:auto; overflow:visible; padding:44px var(--pad) 54px}
+  .pin__who{position:static; margin-bottom:34px}
+  .pin__ask{position:static; transform:none; white-space:normal; font-size:var(--msize,19vw)}
+  .pin__rule{display:none}
+  .pin__answer{position:static; margin-top:34px; padding-top:26px; border-top:1px solid var(--fg,var(--black))}
+  .pin__n{position:static; margin-top:30px}
+  .route{opacity:1; transform:none}
+  .route__line{clip-path:none}
+  .more__head,.long__grid,.said__head,.said__row,.across__row,.ends__row,.foot__map,.title__row,.part{grid-template-columns:1fr}
+  .more__head .meta{margin-top:10px}
+  .more li a{grid-template-columns:2.4em minmax(0,1fr)}
+  .more li a .meta:last-child{grid-column:2; margin-top:6px}
+  .long__right{margin-top:36px; padding-left:0; border-left:0; grid-template-columns:1fr}
+  .long__right img{width:160px; margin-bottom:24px}
+  .said__head h2 + h2{padding-left:0}
+  .said__row > *{padding-block:20px}
+  .said__obj{padding-bottom:0 !important}
+  .said__rep{padding-left:18px; margin:14px 0 24px; padding-block:0 !important; border-left:2px solid var(--black)}
+  .said__rep .meta{display:block; margin:8px 0 0}
+  .across__them{text-align:left; padding-bottom:0 !important}
+  .across__motion{padding-left:18px; border-left:2px solid var(--black); margin-bottom:20px; padding-block:0 !important; margin-top:12px}
+  .ends__q{padding-bottom:0 !important}
+  .ends__a{padding-left:0; border-left:0}
+  .ends form{flex-direction:column; align-items:stretch}
+  .ends button{align-self:flex-start}
+  .foot__map nav{grid-template-columns:repeat(2,1fr); margin-top:24px}
+  .title__sum{padding-left:0; border-left:0; margin-top:16px}
+  .part__q{padding-bottom:0}
+  .part__q > div{position:static}
+  .part__a{padding-left:0; border-left:0; padding-top:22px; font-size:19px}
+  .ayah__ar{font-size:29px}
+}
+@media (prefers-reduced-motion:reduce) and (min-width:861px){
+  .pin{height:auto; --k:1}
+  .pin__stick{position:relative; height:auto; min-height:70svh}
+  .pin__answer{position:relative; padding-block:clamp(84px,15vh,140px) 80px; top:0}
+  .route{opacity:1; transform:none}
+  .route__line{clip-path:none}
+}
+@media print{.top,.nextq{display:none}}
